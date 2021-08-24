@@ -8,6 +8,7 @@ const CastError = require('../errors/bad-id-error');
 const NotAutorizationError = require('../errors/not-autorization-error');
 
 require('dotenv').config();
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getMe = (req, res, next) => {
@@ -22,14 +23,14 @@ const getMe = (req, res, next) => {
       if (err.name === 'CastError') throw new CastError('Невалидный ID');
       next(err);
     });
-}
+};
 
 const updateProfile = (req, res, next) => {
   const { name, email } = req.body;
   const ownerId = req.user._id;
-  
+
   const options = { runValidators: true, new: true };
-  
+
   return User.findByIdAndUpdate(ownerId, { name, email }, options)
     .then((user) => {
       if (!user) {
@@ -44,25 +45,23 @@ const updateProfile = (req, res, next) => {
     .catch(next);
 };
 
-const createUser = (req, res, next) => {
-  return bcrypt.hash(req.body.password, 10)
-    .then((hash) => User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: hash,
-    }))
-    .then((user) => res.status(200).send({
-      name: user.name,
-      email: user.email,
-      id: user._id,
-    }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') throw new ValidationError('Некорректные данные');
-      if (err.name === 'MongoError') throw new MongoError('Пользователь уже существует');
-      next(err);
-    })
-    .catch(next);
-}
+const createUser = (req, res, next) => bcrypt.hash(req.body.password, 10)
+  .then((hash) => User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: hash,
+  }))
+  .then((user) => res.status(200).send({
+    name: user.name,
+    email: user.email,
+    id: user._id,
+  }))
+  .catch((err) => {
+    if (err.name === 'ValidationError') throw new ValidationError('Некорректные данные');
+    if (err.name === 'MongoError') throw new MongoError('Пользователь уже существует');
+    next(err);
+  })
+  .catch(next);
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
