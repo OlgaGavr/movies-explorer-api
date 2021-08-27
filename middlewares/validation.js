@@ -2,7 +2,7 @@ const { celebrate, Joi } = require('celebrate');
 
 const postSignUpValidate = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().required(),
+    name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
@@ -17,7 +17,7 @@ const postSignInValidate = celebrate({
 
 const updateUserValidate = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().required(),
+    name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
   }),
 });
@@ -29,12 +29,12 @@ const createMovieValidate = celebrate({
     duration: Joi.number().integer().required(),
     year: Joi.string().required().min(4).max(4),
     description: Joi.string().required(),
-    image: Joi.string().uri().valid(),
-    trailer: Joi.string().uri().valid(),
+    image: Joi.string().pattern(/https?:\/\/(www\.)?[-a-zA-Z0-9~:_@%.#=]{1,256}\.[a-zA-Z0-9]{1,3}([-a-zA-Z0-9~/?!$&'()*+,;:@%.#=]*)?/),
+    trailer: Joi.string().pattern(/https?:\/\/(www\.)?[-a-zA-Z0-9~:_@%.#=]{1,256}\.[a-zA-Z0-9]{1,3}([-a-zA-Z0-9~/?!$&'()*+,;:@%.#=]*)?/),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    thumbnail: Joi.string().uri().valid(),
-    movieId: Joi.string().hex().length(24),
+    thumbnail: Joi.string().pattern(/https?:\/\/(www\.)?[-a-zA-Z0-9~:_@%.#=]{1,256}\.[a-zA-Z0-9]{1,3}([-a-zA-Z0-9~/?!$&'()*+,;:@%.#=]*)?/),
+    movieId: Joi.number().integer().required(),
   }),
 });
 

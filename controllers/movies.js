@@ -6,7 +6,7 @@ const CastError = require('../errors/bad-id-error');
 
 function getMovies(req, res, next) {
   return Movie.find({})
-    .then((movie) => res.status(200).send({ data: movie }))
+    .then((movie) => res.send({ data: movie }))
     .catch(next);
 }
 
@@ -39,7 +39,7 @@ const createMovie = (req, res, next) => {
     movieId,
     owner: req.user._id,
   })
-    .then((movie) => res.status(200).send({
+    .then((movie) => res.send({
       country: movie.country,
       director: movie.director,
       duration: movie.duration,
@@ -71,10 +71,12 @@ function deleteMovie(req, res, next) {
         throw new OwnerError('Вы не можете удалять фильмы других пользователей');
       }
 
-      return Movie.findByIdAndRemove(movie)
-        .then((movieDel) => {
-          res.status(200).send({ data: movieDel });
-        });
+      // return Movie.findByIdAndRemove(movie)
+      //   .then((movieDel) => {
+      //     res.send({ data: movieDel });
+      //   });
+      return movie.remove()
+        .then(() => res.send({ data: movie }));
     })
     .catch((err) => {
       if (err.name === 'CastError') throw new CastError('Невалидный ID');

@@ -14,7 +14,7 @@ const getMe = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
       }
-      res.status(200).send({ data: user });
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') throw new CastError('Невалидный ID');
@@ -33,7 +33,7 @@ const updateProfile = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
       }
-      res.status(200).send({ data: user });
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') throw new ValidationError('Некорректные данные');
@@ -49,7 +49,7 @@ const createUser = (req, res, next) => bcrypt.hash(req.body.password, 10)
     email: req.body.email,
     password: hash,
   }))
-  .then((user) => res.status(200).send({
+  .then((user) => res.send({
     name: user.name,
     email: user.email,
     id: user._id,
