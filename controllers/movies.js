@@ -5,7 +5,8 @@ const OwnerError = require('../errors/owner-error');
 const CastError = require('../errors/bad-id-error');
 
 function getMovies(req, res, next) {
-  return Movie.find({})
+//  const ownerId = req.id;
+  return Movie.find({ owner: req.user._id })
     .then((movie) => res.send({ data: movie }))
     .catch(next);
 }
@@ -52,6 +53,7 @@ const createMovie = (req, res, next) => {
       thumbnail: movie.thumbnail,
       movieId: movie.movieId,
       owner: req.user._id,
+      _id: movie._id,
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') throw new ValidationError('Некорректные данные');

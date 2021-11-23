@@ -11,7 +11,7 @@ const { CURRENT_PORT, CURRENT_DB_ADRESS } = require('./config');
 const options = {
   origin: [
     'http://localhost:3000',
-    'http://localhost:3003',
+    'http://localhost:3001',
     'http://mestechko.students.nomoredomains.club',
     'https://mestechko.students.nomoredomains.club',
   ],

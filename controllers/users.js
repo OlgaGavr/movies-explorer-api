@@ -55,8 +55,8 @@ const createUser = (req, res, next) => bcrypt.hash(req.body.password, 10)
     id: user._id,
   }))
   .catch((err) => {
-    if (err.name === 'ValidationError') throw new ValidationError('Некорректные данные');
-    if (err.name === 'MongoError') throw new MongoError('Пользователь уже существует');
+    if (err.name === 'ValidationError') throw new ValidationError('При регистрации пользователя произошла ошибка.');
+    if (err.name === 'MongoError') throw new MongoError('Пользователь с таким email уже существует.');
     next(err);
   })
   .catch(next);
@@ -67,12 +67,12 @@ const login = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        throw new NotAutorizationError('Неправильные почта или пароль');
+        throw new NotAutorizationError('Вы ввели неправильный логин или пароль');
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new NotAutorizationError('Неправильные почта или пароль');
+            throw new NotAutorizationError('Вы ввели неправильный логин или пароль.');
           }
           const token = jwt.sign({ _id: user._id }, CURRENT_JWT_SECRET, { expiresIn: '7d' });
           return res.send({ token });
