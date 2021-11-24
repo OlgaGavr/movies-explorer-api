@@ -12,8 +12,8 @@ const options = {
   origin: [
     'http://localhost:3000',
     'http://localhost:3001',
-    'http://mestechko.students.nomoredomains.club',
-    'https://mestechko.students.nomoredomains.club',
+    'http://peliculas.nomoredomains.club',
+    'https://peliculas.nomoredomains.club',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
