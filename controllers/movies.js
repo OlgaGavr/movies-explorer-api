@@ -56,7 +56,8 @@ const createMovie = (req, res, next) => {
       _id: movie._id,
     }))
     .catch((err) => {
-      if (err.name === 'ValidationError') throw new ValidationError('Некорректные данные');
+      if (err.name === 'ValidationError') throw new ValidationError('Невозможно сохранить карточку');
+      if (err.error === 'Bad Request') throw new ValidationError('Невозможно сохранить карточку');
       next(err);
     })
     .catch(next);
